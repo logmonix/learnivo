@@ -12,10 +12,12 @@ class UserCreate(UserBase):
 class UserLogin(UserBase):
     password: str
 
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
     id: UUID
-    full_name: Optional[str] = None
+    email: str
+    full_name: str
     role: str
+    is_admin: bool
     is_active: bool
 
     class Config:

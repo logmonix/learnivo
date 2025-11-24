@@ -32,8 +32,15 @@ export const useProfileStore = defineStore('profile', () => {
 
     function selectProfile(profile) {
         currentProfile.value = profile;
-        // You might want to persist this choice or navigate
+        localStorage.setItem('currentProfileId', profile.id);
     }
 
-    return { profiles, currentProfile, loading, fetchProfiles, createProfile, selectProfile };
+    function loadCurrentProfile() {
+        const profileId = localStorage.getItem('currentProfileId');
+        if (profileId && profiles.value.length > 0) {
+            currentProfile.value = profiles.value.find(p => p.id === profileId);
+        }
+    }
+
+    return { profiles, currentProfile, loading, fetchProfiles, createProfile, selectProfile, loadCurrentProfile };
 });

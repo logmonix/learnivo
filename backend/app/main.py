@@ -22,10 +22,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.api.v1 import auth, profiles
+from app.api.v1 import auth, profiles, curriculum, learning, admin, gamification, seed, dev
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(profiles.router, prefix="/api/v1/profiles", tags=["profiles"])
+app.include_router(curriculum.router, prefix="/api/v1/curriculum", tags=["curriculum"])
+app.include_router(learning.router, prefix="/api/v1/learning", tags=["learning"])
+app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
+app.include_router(gamification.router, prefix="/api/v1/gamification", tags=["gamification"])
+app.include_router(seed.router, prefix="/api/v1/seed", tags=["seed"])
+app.include_router(dev.router, prefix="/api/v1/dev", tags=["dev"])
 
 @app.get("/")
 async def root():

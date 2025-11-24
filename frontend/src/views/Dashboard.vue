@@ -10,8 +10,9 @@ const showAddModal = ref(false);
 const newProfileName = ref('');
 const newProfileGrade = ref(5);
 
-onMounted(() => {
-    profileStore.fetchProfiles();
+onMounted(async () => {
+    await profileStore.fetchProfiles();
+    profileStore.loadCurrentProfile();
 });
 
 async function handleCreateProfile() {
@@ -44,7 +45,7 @@ async function handleCreateProfile() {
             <div 
                 v-for="profile in profileStore.profiles" 
                 :key="profile.id"
-                @click="profileStore.selectProfile(profile)"
+                @click="() => { profileStore.selectProfile(profile); $router.push('/student'); }"
                 class="card group cursor-pointer hover:scale-105 transition-transform border-2 border-transparent hover:border-primary relative overflow-hidden"
             >
                 <div class="absolute top-0 right-0 bg-accent-yellow text-xs font-bold px-2 py-1 rounded-bl-xl">
@@ -57,7 +58,6 @@ async function handleCreateProfile() {
                     </div>
                     <h3 class="text-2xl font-bold text-dark">{{ profile.display_name }}</h3>
                     <p class="text-gray-500 font-bold">Grade {{ profile.current_grade }}</p>
-                    
                     <div class="mt-4 flex gap-2 text-sm font-bold text-gray-400">
                         <span>🪙 {{ profile.coins }}</span>
                         <span>⭐ {{ profile.xp }}</span>

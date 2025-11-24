@@ -1,18 +1,22 @@
 import { defineStore } from 'pinia';
 import api from '../api/axios';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
-    const user = ref(null);
-    const token = ref(localStorage.getItem('token') || null);
+    const user = ref(JSON.parse(localStorage.getItem('user') || 'null'));
+    const token = ref(localStorage.getItem('token') || '');
     const router = useRouter();
+
+    const isAdmin = computed(() => user.value?.is_admin || false);
 
     async function login(email, password) {
         try {
             const response = await api.post('/auth/login', { email, password });
             token.value = response.data.access_token;
+            user.value = response.data.user;
             localStorage.setItem('token', token.value);
+            localStorage.setItem('user', JSON.stringify(user.value));
 
             // Ideally fetch user profile here
             // user.value = await fetchUserProfile();
@@ -35,11 +39,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function logout() {
-        token.value = null;
+        token.value = '';
         user.value = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         router.push('/login');
     }
 
-    return { user, token, login, register, logout };
+    return { token, user, isAdmin, login, register, logout };
 });

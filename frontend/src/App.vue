@@ -1,10 +1,13 @@
+```vue
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { BookOpen, Star, User, Menu } from 'lucide-vue-next'
+import { useAuthStore } from './stores/auth' // Added import for auth store
 
 const router = useRouter()
 const isMenuOpen = ref(false)
+const authStore = useAuthStore() // Initialize auth store
 </script>
 
 <template>
@@ -21,16 +24,16 @@ const isMenuOpen = ref(false)
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center gap-6">
-          <button class="flex items-center gap-2 font-bold text-gray-600 hover:text-primary transition-colors">
+          <button @click="router.push('/student')" class="flex items-center gap-2 font-bold text-gray-600 hover:text-primary transition-colors">
             <Star class="text-accent-yellow fill-current" />
             Daily Mix
           </button>
-          <button class="flex items-center gap-2 font-bold text-gray-600 hover:text-primary transition-colors">
+          <button @click="router.push('/profile')" class="flex items-center gap-2 font-bold text-gray-600 hover:text-primary transition-colors">
             <User />
             Profile
           </button>
-          <button class="btn-primary">
-            Start Learning
+          <button v-if="authStore.isAdmin" @click="router.push('/admin')" class="btn-primary">
+            Admin
           </button>
         </div>
 
