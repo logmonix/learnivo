@@ -10,19 +10,19 @@ services:
       - POSTGRES_PASSWORD=learnivo_secret
       - POSTGRES_DB=learnivo_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
   backend:
     build: ./backend
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://learnivo:learnivo_secret@db:5432/learnivo_db
       - REDIS_URL=redis://redis:6379/0

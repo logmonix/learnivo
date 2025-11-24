@@ -10,6 +10,7 @@ app = FastAPI(
 # CORS Configuration
 origins = [
     "http://localhost:5173",  # Vue Frontend
+    "http://127.0.0.1:5173",
     "http://localhost:3000",
 ]
 
@@ -20,6 +21,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from app.api.v1 import auth, profiles
+
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(profiles.router, prefix="/api/v1/profiles", tags=["profiles"])
 
 @app.get("/")
 async def root():
