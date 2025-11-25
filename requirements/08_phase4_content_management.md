@@ -60,11 +60,11 @@ Create a robust content management system where admins can manually create/edit 
 5. ✅ Update navigation to show/hide admin link
 
 ### Sprint 2: Content Editor
-1. Create admin content browser (subjects → chapters)
-2. Build rich text editor component
-3. Implement chapter detail editing
-4. Add save/publish functionality
-5. Create preview mode
+1. ✅ Create admin content browser (subjects → chapters)
+2. ✅ Build rich text editor component
+3. ✅ Implement chapter detail editing
+4. ✅ Add save/publish functionality
+5. ⏳ Create preview mode (uses existing lesson view)
 
 ### Sprint 3: Image Management
 1. Set up image upload API (local storage first)

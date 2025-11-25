@@ -186,9 +186,9 @@ function toggleSubject(subject) {
                     <p class="text-gray-600">See the platform as a student</p>
                 </div>
 
-                <div class="card cursor-pointer hover:scale-105 transition-transform opacity-50">
+                <div class="card cursor-pointer hover:scale-105 transition-transform" @click="router.push('/admin/content')">
                     <h3 class="text-xl font-bold text-dark mb-2">Content Library</h3>
-                    <p class="text-gray-600">View and edit all content (Coming Soon)</p>
+                    <p class="text-gray-600">View and edit all content</p>
                 </div>
 
                 <div class="card cursor-pointer hover:scale-105 transition-transform opacity-50">

@@ -3,9 +3,13 @@ from typing import List, Optional
 from uuid import UUID
 
 class ChapterBase(BaseModel):
+    id: UUID  # Add the UUID field
     title: str
     description: Optional[str] = None
     order_index: int = 0
+    
+    class Config:
+        from_attributes = True
 
 class SubjectBase(BaseModel):
     name: str

@@ -4,7 +4,18 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
-    const user = ref(JSON.parse(localStorage.getItem('user') || 'null'));
+    // Safely parse user from localStorage
+    let user = ref(null);
+    try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser && storedUser !== 'undefined' && storedUser !== 'null') {
+            user = ref(JSON.parse(storedUser));
+        }
+    } catch (error) {
+        console.warn('Failed to parse stored user data:', error);
+        localStorage.removeItem('user'); // Clean up invalid data
+    }
+
     const token = ref(localStorage.getItem('token') || '');
     const router = useRouter();
 

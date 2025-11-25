@@ -31,7 +31,8 @@ async function loadSubject() {
 }
 
 function startChapter(chapter) {
-    router.push(`/lesson/${chapter.id || chapter.order_index}`);
+    // Always use the chapter UUID, not order_index
+    router.push(`/lesson/${chapter.id}`);
 }
 </script>
 

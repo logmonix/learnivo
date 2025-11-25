@@ -16,6 +16,17 @@ class Settings(BaseSettings):
     # AI Keys (Optional for now)
     OPENAI_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
+    
+    # File Upload Settings
+    UPLOAD_DIR: str = "backend/uploads"
+    MAX_FILE_SIZE: int = 5 * 1024 * 1024  # 5MB in bytes
+    ALLOWED_IMAGE_TYPES: set = {
+        "image/jpeg",
+        "image/jpg", 
+        "image/png",
+        "image/gif",
+        "image/webp"
+    }
 
     class Config:
         env_file = ".env"
