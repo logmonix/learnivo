@@ -13,6 +13,7 @@ import AdminDashboard from './views/AdminDashboard.vue';
 import AdminContentBrowser from './views/AdminContentBrowser.vue';
 import ProfileView from './views/ProfileView.vue';
 import AdminImageGallery from './views/AdminImageGallery.vue';
+import AdminLessonEditor from './views/AdminLessonEditor.vue';
 
 const routes = [
     { path: '/', redirect: '/login' },
@@ -24,8 +25,10 @@ const routes = [
     { path: '/admin', component: AdminDashboard },
     { path: '/admin/content', component: AdminContentBrowser },
     { path: '/admin/images', component: AdminImageGallery },
+    { path: '/admin/lesson/:chapterId', component: AdminLessonEditor },
     { path: '/profile', component: ProfileView },
 ];
+
 
 const router = createRouter({
     history: createWebHistory(),

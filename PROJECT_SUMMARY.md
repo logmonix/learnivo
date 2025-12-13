@@ -136,7 +136,7 @@ To use real AI instead of mock responses:
 5. **Technical Improvements**
    - Streaming AI responses (real-time generation)
    - Offline PWA support
-   - Mobile apps (React Native/Flutter)
+   - Mobile apps (React Native) - 🚧 In Progress (Scaffolded)
    - Analytics with Parquet files
 
 ## 🐛 Known Limitations

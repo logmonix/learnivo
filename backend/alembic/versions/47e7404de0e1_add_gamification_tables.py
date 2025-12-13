@@ -44,7 +44,7 @@ def upgrade() -> None:
     sa.Column('profile_id', sa.UUID(), nullable=False),
     sa.Column('item_id', sa.UUID(), nullable=False),
     sa.Column('is_equipped', sa.Boolean(), nullable=True),
-    sa.Column('purchased_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('purchased_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.ForeignKeyConstraint(['item_id'], ['avatar_items.id'], ),
     sa.ForeignKeyConstraint(['profile_id'], ['profiles.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -53,7 +53,7 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('profile_id', sa.UUID(), nullable=False),
     sa.Column('badge_id', sa.UUID(), nullable=False),
-    sa.Column('earned_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('earned_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.ForeignKeyConstraint(['badge_id'], ['badges.id'], ),
     sa.ForeignKeyConstraint(['profile_id'], ['profiles.id'], ),
     sa.PrimaryKeyConstraint('id')

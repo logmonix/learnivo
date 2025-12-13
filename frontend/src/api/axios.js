@@ -10,9 +10,13 @@ const api = axios.create({
 // Add a request interceptor to inject the token
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        } catch (e) {
+            // Storage access restricted, proceed without token
         }
         return config;
     },

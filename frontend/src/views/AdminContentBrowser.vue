@@ -46,8 +46,9 @@ async function selectSubject(subject) {
 }
 
 function editChapter(chapter) {
-    router.push(`/admin/content-editor/${chapter.id}`);
+    router.push(`/admin/lesson/${chapter.id}`);
 }
+
 
 function viewContent(chapter) {
     router.push(`/lesson/${chapter.id}`);

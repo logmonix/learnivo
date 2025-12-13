@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useProfileStore } from '../stores/profile';
 import { Plus, User, X } from 'lucide-vue-next';
+import AdminImageGallery from '../components/AdminImageGallery.vue';
 
 const profileStore = useProfileStore();
 const showAddModal = ref(false);
@@ -76,6 +77,7 @@ async function handleCreateProfile() {
                 <h3 class="text-xl font-bold text-gray-500">Add Kid</h3>
             </div>
         </div>
+    <AdminImageGallery />
 
         <!-- Add Profile Modal -->
         <div v-if="showAddModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">

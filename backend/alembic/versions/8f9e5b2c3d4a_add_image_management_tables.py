@@ -22,7 +22,7 @@ def upgrade() -> None:
     """Upgrade schema."""
     # Create images table
     op.create_table('images',
-        sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('id', sa.UUID(), nullable=False),
         sa.Column('filename', sa.String(), nullable=False),
         sa.Column('original_filename', sa.String(), nullable=False),
         sa.Column('file_path', sa.String(), nullable=False),
@@ -30,9 +30,9 @@ def upgrade() -> None:
         sa.Column('mime_type', sa.String(), nullable=False),
         sa.Column('width', sa.Integer(), nullable=True),
         sa.Column('height', sa.Integer(), nullable=True),
-        sa.Column('uploaded_by', postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-        sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+        sa.Column('uploaded_by', sa.UUID(), nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
+        sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
         sa.ForeignKeyConstraint(['uploaded_by'], ['users.id'], ),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('filename')
@@ -44,12 +44,12 @@ def upgrade() -> None:
     
     # Create chapter_images association table
     op.create_table('chapter_images',
-        sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column('chapter_id', postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column('image_id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('id', sa.UUID(), nullable=False),
+        sa.Column('chapter_id', sa.UUID(), nullable=False),
+        sa.Column('image_id', sa.UUID(), nullable=False),
         sa.Column('display_order', sa.Integer(), nullable=True),
         sa.Column('caption', sa.Text(), nullable=True),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
         sa.ForeignKeyConstraint(['chapter_id'], ['chapters.id'], ondelete='CASCADE'),
         sa.ForeignKeyConstraint(['image_id'], ['images.id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('id')

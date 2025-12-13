@@ -30,7 +30,7 @@ def upgrade() -> None:
     sa.Column('total_questions', sa.Integer(), nullable=True),
     sa.Column('xp_earned', sa.Integer(), nullable=True),
     sa.Column('completed_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['chapter_id'], ['chapters.id'], ),
     sa.ForeignKeyConstraint(['profile_id'], ['profiles.id'], ),

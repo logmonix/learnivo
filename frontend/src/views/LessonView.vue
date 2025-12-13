@@ -15,6 +15,7 @@ const showQuiz = ref(false);
 const quizAnswers = ref({});
 const quizResult = ref(null);
 const submitting = ref(false);
+const quizData = ref(null);
 
 const profile = computed(() => profileStore.currentProfile);
 
@@ -28,12 +29,25 @@ onMounted(async () => {
 
 async function loadLesson() {
     try {
-        const response = await api.get(`/learning/${route.params.chapterId}/lesson`, {
+        // Load Lesson
+        const lessonResponse = await api.get(`/learning/${route.params.chapterId}/lesson`, {
             params: { profile_id: profile.value.id }
         });
-        lesson.value = response.data;
+        lesson.value = lessonResponse.data;
+        
+        // Load Quiz
+        try {
+            const quizResponse = await api.get(`/learning/${route.params.chapterId}/quiz`, {
+                params: { profile_id: profile.value.id }
+            });
+            quizData.value = quizResponse.data.quiz; // { questions: [...] }
+        } catch (e) {
+            console.warn("No quiz found for this chapter");
+            quizData.value = null;
+        }
+
     } catch (error) {
-        console.error('Failed to load lesson:', error);
+        console.error('Failed to load content:', error);
         alert('Failed to load lesson. Please try again.');
     } finally {
         loading.value = false;
@@ -128,11 +142,11 @@ function goBack() {
 
                     <!-- Lesson Text (Markdown-style) -->
                     <div class="prose prose-lg max-w-none">
-                        <div v-html="lesson.lesson.lesson_text.replace(/\n/g, '<br>')" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
+                        <div v-html="(lesson.lesson.markdown || lesson.lesson.lesson_text || '').replace(/\n/g, '<br>')" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
                     </div>
 
                     <div class="mt-8 pt-6 border-t-2 border-gray-100">
-                        <button @click="startQuiz" class="btn-primary text-lg flex items-center gap-2 mx-auto">
+                        <button v-if="quizData" @click="startQuiz" class="btn-primary text-lg flex items-center gap-2 mx-auto">
                             <Sparkles size="20" />
                             Take the Quiz!
                         </button>
@@ -150,7 +164,7 @@ function goBack() {
 
                     <div class="space-y-6">
                         <div 
-                            v-for="(question, index) in lesson.lesson.quiz.questions" 
+                            v-for="(question, index) in quizData.questions" 
                             :key="index"
                             class="p-4 bg-gray-50 rounded-2xl"
                         >
@@ -177,10 +191,10 @@ function goBack() {
                     <div class="mt-8 pt-6 border-t-2 border-gray-100">
                         <button 
                             @click="submitQuiz" 
-                            :disabled="Object.keys(quizAnswers).length < lesson.lesson.quiz.questions.length || submitting"
+                            :disabled="Object.keys(quizAnswers).length < quizData.questions.length || submitting"
                             :class="[
                                 'btn-primary text-lg flex items-center gap-2 mx-auto',
-                                (Object.keys(quizAnswers).length < lesson.lesson.quiz.questions.length || submitting) && 'opacity-50 cursor-not-allowed'
+                                (Object.keys(quizAnswers).length < quizData.questions.length || submitting) && 'opacity-50 cursor-not-allowed'
                             ]"
                         >
                             <Award size="20" />

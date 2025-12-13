@@ -36,7 +36,7 @@ def upgrade() -> None:
     sa.Column('full_name', sa.String(), nullable=True),
     sa.Column('role', sa.String(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -58,7 +58,7 @@ def upgrade() -> None:
     sa.Column('current_grade', sa.Integer(), nullable=True),
     sa.Column('xp', sa.Integer(), nullable=True),
     sa.Column('coins', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.ForeignKeyConstraint(['parent_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -68,7 +68,7 @@ def upgrade() -> None:
     sa.Column('block_type', sa.String(), nullable=False),
     sa.Column('content_data', sa.JSON(), nullable=False),
     sa.Column('ai_model_used', sa.String(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=True),
     sa.ForeignKeyConstraint(['chapter_id'], ['chapters.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

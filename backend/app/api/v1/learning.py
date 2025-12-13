@@ -99,19 +99,19 @@ async def submit_quiz(
 ):
     """Submit quiz answers and calculate score."""
     
-    # 1. Get lesson content
+    # 1. Get quiz content
     result = await db.execute(
         select(ContentBlock)
         .where(ContentBlock.chapter_id == chapter_id)
-        .where(ContentBlock.block_type == 'lesson')
+        .where(ContentBlock.block_type == 'quiz')
     )
     content_block = result.scalars().first()
     if not content_block:
-        raise HTTPException(status_code=404, detail="Lesson not found")
+        raise HTTPException(status_code=404, detail="Quiz not found")
     
     # 2. Calculate score
-    quiz_data = content_block.content_data.get('quiz', {})
-    questions = quiz_data.get('questions', [])
+    # content_data is directly the quiz dict {"questions": [...]}
+    questions = content_block.content_data.get('questions', [])
     
     correct_count = 0
     for idx, question in enumerate(questions):
@@ -155,4 +155,50 @@ async def submit_quiz(
         "percentage": score_percentage,
         "xp_earned": xp_earned,
         "coins_earned": correct_count * 5
+    }
+
+@router.get("/{chapter_id}/quiz")
+async def get_quiz(
+    chapter_id: str,
+    profile_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """
+    Retrieve the quiz content for a chapter.
+    Returns the stored quiz JSON (questions, options, etc.) and progress info.
+    """
+    # 1️⃣ Fetch the quiz ContentBlock
+    result = await db.execute(
+        select(ContentBlock)
+        .where(ContentBlock.chapter_id == chapter_id)
+        .where(ContentBlock.block_type == "quiz")
+    )
+    quiz_block = result.scalars().first()
+    if not quiz_block:
+        raise HTTPException(status_code=404, detail="Quiz not found")
+
+    # 2️⃣ Ensure a StudentProgress row exists (lazy creation)
+    result = await db.execute(
+        select(StudentProgress)
+        .where(StudentProgress.profile_id == profile_id)
+        .where(StudentProgress.chapter_id == chapter_id)
+    )
+    progress = result.scalars().first()
+    if not progress:
+        progress = StudentProgress(
+            profile_id=profile_id,
+            chapter_id=chapter_id,
+            status="not_started",
+        )
+        db.add(progress)
+        await db.commit()
+
+    return {
+        "quiz": quiz_block.content_data,
+        "progress": {
+            "status": progress.status,
+            "score": progress.score,
+            "total_questions": progress.total_questions,
+        },
     }

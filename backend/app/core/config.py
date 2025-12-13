@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://learnivo:learnivo_secret@localhost:5432/learnivo_db"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./learnivo.db"
     
     # Security
     SECRET_KEY: str = "CHANGE_THIS_TO_A_SECURE_SECRET_KEY_IN_PRODUCTION"

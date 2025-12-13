@@ -134,3 +134,18 @@ async def update_content_block(
     await db.commit()
     
     return {"message": "Content updated successfully"}
+
+@router.get("/chapters/{chapter_id}/content")
+async def get_chapter_content(
+    chapter_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(require_admin)
+):
+    """Get all content blocks for a chapter (lesson, quiz, etc)."""
+    result = await db.execute(
+        select(ContentBlock)
+        .where(ContentBlock.chapter_id == chapter_id)
+    )
+    blocks = result.scalars().all()
+    return blocks
+
